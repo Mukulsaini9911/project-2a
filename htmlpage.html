@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Restaurant System </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="test.js"></script>
+    <script src="backend.js"></script>
+    <script src="ai-features.js"></script>
+    <script>
+        // Check if user is logged in
+        if (!localStorage.getItem('userLogin')) {
+            window.location.href = 'login.html';
+        }
+    </script>
+    <style>
+        * { font-family: 'Outfit', sans-serif; }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+    </style>
+    <link rel="icon" type="image/jpeg" href="restaurant.jpeg">
+</head>
+
+<body class="bg-black text-white overflow-x-hidden">
+    <!-- Animated Background -->
+    <div class="fixed inset-0 z-0">
+        <div class="absolute inset-0 bg-gradient-to-br from-purple-900 via-black to-blue-900"></div>
+        <div class="absolute inset-0" style="background-image: url('https://www.transparenttextures.com/patterns/stardust.png');"></div>
+        <!-- Floating Orbs -->
+        <div class="absolute top-20 left-10 w-72 h-72 bg-purple-500/30 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/30 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+    </div>
+
+    <!-- Welcome Animation -->
+    <div id="welcome-goku" class="fixed inset-0 z-50 flex justify-center items-center" style="background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);">
+        <div class="text-center">
+            <div class="relative mb-8">
+                <div class="w-32 h-32 mx-auto border-4 border-yellow-400 rounded-full animate-spin" style="border-top-color: transparent;"></div>
+                <i class="fas fa-utensils text-5xl text-yellow-400 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></i>
+            </div>
+            <h1 class="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 bg-clip-text text-transparent animate-pulse">
+                Welcome to
+            </h1>
+            <p class="text-2xl md:text-3xl font-semibold text-gray-300">Satyug Darshan</p>
+        </div>
+    </div>
+
+    <!-- Particle Container for Magic Effects -->
+    <div id="particle-container" class="fixed inset-0 z-0 pointer-events-none"></div>
+
+    <!-- Floating Notifications -->
+    <div id="notification-container" class="fixed top-20 right-6 z-40 space-y-3 pointer-events-none"></div>
+
+    <!-- Header -->
+    <header class="fixed w-full z-40 glassmorphism">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-yellow-400 via-orange-500 to-pink-500 bg-clip-text text-transparent">
+                Satyug Darshan
+            </h1>
+            <nav class="hidden md:flex space-x-2">
+                <a href="#hero" class="px-4 py-2 rounded-full hover:bg-white/10 transition-all duration-300 hover:scale-105">Home</a>
+                <a href="#menu" class="px-4 py-2 rounded-full hover:bg-white/10 transition-all duration-300 hover:scale-105">Menu</a>
+                <a href="#order-summary" class="px-4 py-2 rounded-full hover:bg-white/10 transition-all duration-300 hover:scale-105">Order</a>
+                <a href="reservation.html" class="px-4 py-2 rounded-full hover:bg-white/10 transition-all duration-300 hover:scale-105">Book Table</a>
+                <a href="#contact" class="px-4 py-2 rounded-full hover:bg-white/10 transition-all duration-300 hover:scale-105">Contact</a>
+                <a href="#" onclick="accessAdminDashboard()" class="px-4 py-2 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-semibold hover:scale-105 transition-all">Admin</a>
+            </nav>
+            <button class="md:hidden text-white text-2xl">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero" class="relative min-h-screen flex items-center justify-center z-10 pt-20">
+        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/50"></div>
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <div class="mb-6">
+                <span class="inline-block px-6 py-2 bg-white/10 backdrop-blur-md rounded-full text-sm font-medium border border-white/20">
+                    <i class="fas fa-star text-yellow-400 mr-2"></i>Premium Dining Experience
+                </span>
+            </div>
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                Taste the <span class="bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 bg-clip-text text-transparent">Extraordinary</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 mb-10 max-w-2xl mx-auto">
+                Where culinary art meets pure magic. Experience flavors that will transport you to another dimension.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button class="px-8 py-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold rounded-full hover:scale-110 transition-all duration-300 shadow-lg shadow-yellow-400/30" onclick="document.getElementById('menu').scrollIntoView({behavior: 'smooth'})">
+                    <i class="fas fa-compass mr-2"></i>Explore Menu
+                </button>
+                <button class="px-8 py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold rounded-full hover:bg-white/20 hover:scale-110 transition-all duration-300" onclick="window.location.href='reservation.html'">
+                    <i class="fas fa-calendar-alt mr-2"></i>Book Table
+                </button>
+            </div>
+            
+            <!-- Stats -->
+            <div class="flex flex-wrap justify-center gap-8 mt-16">
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-yellow-400">10+</div>
+                    <div class="text-gray-400">Years</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-pink-400">50+</div>
+                    <div class="text-gray-400">Dishes</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-purple-400">10K+</div>
+                    <div class="text-gray-400">Happy Customers</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <div class="w-8 h-14 border-2 border-white/30 rounded-full flex justify-center pt-2">
+                <div class="w-2 h-3 bg-white rounded-full animate-pulse"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="py-20 relative z-10">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="p-8 rounded-3xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-yellow-400/50 transition-all duration-300 hover:-translate-y-2">
+                    <div class="w-16 h-16 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-2xl flex items-center justify-center mb-4">
+                        <i class="fas fa-robot text-2xl text-black"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">AI Recommendations</h3>
+                    <p class="text-gray-400">Smart suggestions powered by AI based on your taste preferences.</p>
+                </div>
+                <div class="p-8 rounded-3xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-pink-400/50 transition-all duration-300 hover:-translate-y-2">
+                    <div class="w-16 h-16 bg-gradient-to-r from-pink-500 to-purple-500 rounded-2xl flex items-center justify-center mb-4">
+                        <i class="fas fa-mobile-alt text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Digital Menu</h3>
+                    <p class="text-gray-400">Scan QR & order directly from your phone. Pure magic!</p>
+                </div>
+                <div class="p-8 rounded-3xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-purple-400/50 transition-all duration-300 hover:-translate-y-2">
+                    <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-blue-500 rounded-2xl flex items-center justify-center mb-4">
+                        <i class="fas fa-bolt text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Real-Time Orders</h3>
+                    <p class="text-gray-400">Track your order from kitchen to table in real-time.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section id="menu" class="py-20 relative z-10">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-4">
+                Our <span class="bg-gradient-to-r from-yellow-400 to-pink-500 bg-clip-text text-transparent">Menu</span>
+            </h2>
+            <p class="text-center text-gray-400 mb-12 max-w-xl mx-auto">Crafted with love, served with passion. Every dish tells a story.</p>
+            
+            <!-- Main Course -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-bold mb-6 flex items-center">
+                    <i class="fas fa-utensils text-yellow-400 mr-3"></i>Main Course
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="menu-item group relative overflow-hidden rounded-3xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-yellow-400/50 transition-all duration-500 hover:-translate-y-3">
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600" alt="Pizza" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                            <span class="absolute top-3 right-3 px-3 py-1 bg-yellow-400 text-black text-xs font-bold rounded-full">Popular</span>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2">Artisan Pizza</h3>
+                            <p class="text-gray-400 text-sm mb-4">Hand-tossed with premium toppings & secret herbs.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-2xl font-bold text-yellow-400">₹300</span>
+                                <button class="px-5 py-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-semibold rounded-full hover:scale-110 transition-transform" onclick="addToOrder('Pizza', 300)">
+                                    <i class="fas fa-plus mr-1"></i>Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-item group relative overflow-hidden rounded-3xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-yellow-400/50 transition-all duration-500 hover:-translate-y-3">
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTo_eHhGefoaJoVR5aRxSXcwt845S3Etf-JGw&s" alt="Biryani" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2">Royal Biryani</h3>
+                            <p class="text-gray-400 text-sm mb-4">Aromatic basmati rice with exotic spices.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-2xl font-bold text-yellow-400">₹300</span>
+                                <button class="px-5 py-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-semibold rounded-full hover:scale-110 transition-transform" onclick="addToOrder('Biryani', 300)">
+                                    <i class="fas fa-plus mr-1"></i>Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-item group relative overflow-hidden rounded-3xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-yellow-400/50 transition-all duration-500 hover:-translate-y-3">
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="https://media-cdn.tripadvisor.com/media/photo-s/1a/66/c0/d3/paneer-delight.jpg" alt="Paneer" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2">Paneer Delight</h3>
+                            <p class="text-gray-400 text-sm mb-4">Creamy paneer with aromatic spices.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-2xl font-bold text-yellow-400">₹450</span>
+                                <button class="px-5 py-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-semibold rounded-full hover:scale-110 transition-transform" onclick="addToOrder('Paneer Delight', 450)">
+                                    <i class="fas fa-plus mr-1"></i>Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Desserts -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-bold mb-6 flex items-center">
+                    <i class="fas fa-birthday-cake text-pink-400 mr-3"></i>Desserts
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="menu-item group relative overflow-hidden rounded-3xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-pink-400/50 transition-all duration-500 hover:-translate-y-3">
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSghV5U3cc8zwpQIBT5lFC44Ky79cSXQvYvHQ&s" alt="Gulab Jamun" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2">Gulab Jamun</h3>
+                            <p class="text-gray-400 text-sm mb-4">Soft milk dumplings in rose syrup.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-2xl font-bold text-pink-400">₹120</span>
+                                <button class="px-5 py-2 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-semibold rounded-full hover:scale-110 transition-transform" onclick="addToOrder('Gulab Jamun', 120)">
+                                    <i class="fas fa-plus mr-1"></i>Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-item group relative overflow-hidden rounded-3xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-pink-400/50 transition-all duration-500 hover:-translate-y-3">
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=600" alt="Ice Cream" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2">Premium Ice Cream</h3>
+                            <p class="text-gray-400 text-sm mb-4">Three scoops of artisanal flavors.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-2xl font-bold text-pink-400">₹150</span>
+                                <button class="px-5 py-2 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-semibold rounded-full hover:scale-110 transition-transform" onclick="addToOrder('Ice Cream', 150)">
+                                    <i class="fas fa-plus mr-1"></i>Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-item group relative overflow-hidden rounded-3xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-pink-400/50 transition-all duration-500 hover:-translate-y-3">
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=600" alt="Coffee" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2">Special Coffee</h3>
+                            <p class="text-gray-400 text-sm mb-4">Premium roasted, freshly brewed.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-2xl font-bold text-pink-400">₹90</span>
+                                <button class="px-5 py-2 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-semibold rounded-full hover:scale-110 transition-transform" onclick="addToOrder('Coffee', 90)">
+                                    <i class="fas fa-plus mr-1"></i>Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Drinks -->
+            <div>
+                <h3 class="text-2xl font-bold mb-6 flex items-center">
+                    <i class="fas fa-glass-cheers text-purple-400 mr-3"></i>Beverages
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="menu-item group relative overflow-hidden rounded-3xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-purple-400/50 transition-all duration-500 hover:-translate-y-3">
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBIecL_ZQzCUFtmTgdiUAW3fATqfjI4MVTTw&s" alt="Lassi" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2"> Lassi</h3>
+                            <p class="text-gray-400 text-sm mb-4">Traditional yogurt drink with mangoes.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-2xl font-bold text-purple-400">₹50</span>
+                                <button class="px-5 py-2 bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold rounded-full hover:scale-110 transition-transform" onclick="addToOrder('Lassi', 50)">
+                                    <i class="fas fa-plus mr-1"></i>Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-item group relative overflow-hidden rounded-3xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-purple-400/50 transition-all duration-500 hover:-translate-y-3">
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1629203851122-3726ecdf080e?w=600" alt="Cold Drink" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2">Soft Drinks</h3>
+                            <p class="text-gray-400 text-sm mb-4">Chilled beverages to refresh you.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-2xl font-bold text-purple-400">₹100</span>
+                                <button class="px-5 py-2 bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold rounded-full hover:scale-110 transition-transform" onclick="addToOrder('Cold Drink', 100)">
+                                    <i class="fas fa-plus mr-1"></i>Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-item group relative overflow-hidden rounded-3xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-purple-400/50 transition-all duration-500 hover:-translate-y-3">
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600" alt="Kesar Badam" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2">Kesar Badam</h3>
+                            <p class="text-gray-400 text-sm mb-4">Rich almond milk with saffron.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-2xl font-bold text-purple-400">₹100</span>
+                                <button class="px-5 py-2 bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold rounded-full hover:scale-110 transition-transform" onclick="addToOrder('Kesar Badam', 100)">
+                                    <i class="fas fa-plus mr-1"></i>Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Recommendation -->
+    <section id="recommendations" class="py-20 relative z-10">
+        <div class="container mx-auto px-6 max-w-3xl">
+            <h2 class="text-3xl font-bold text-center mb-8">
+                <i class="fas fa-robot text-yellow-400 mr-3"></i>AI Smart Recommendation
+            </h2>
+            <div id="recommendation-card" class="p-8 rounded-3xl bg-gradient-to-br from-purple-600/30 via-pink-600/20 to-blue-600/30 backdrop-blur-xl border border-white/20 shadow-2xl">
+                <div class="flex items-start gap-4">
+                    <div class="w-14 h-14 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-2xl flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-lightbulb text-2xl text-black"></i>
+                    </div>
+                    <p id="recommendation-text" class="text-lg text-gray-200 leading-relaxed">
+                        Based on your preferences, we recommend trying our Royal Biryani - a customer favorite that never disappoints!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Special Offers -->
+    <section id="special-offers" class="py-20 relative z-10">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-4">
+                Special <span class="bg-gradient-to-r from-yellow-400 to-pink-500 bg-clip-text text-transparent">Offers</span>
+            </h2>
+            <p class="text-center text-gray-400 mb-12">Exclusive deals for our VIP customers</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="relative group">
+                    <div class="absolute inset-0 bg-gradient-to-r from-yellow-400 to-pink-500 rounded-3xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
+                    <div class="relative p-8 rounded-3xl bg-black/80 backdrop-blur-xl border border-white/10">
+                        <div class="absolute top-4 right-4 text-4xl opacity-20">🎉</div>
+                        <h3 class="text-xl font-bold mb-2">Family Feast</h3>
+                        <p class="text-gray-400 mb-4">Complete meal for 4 people.</p>
+                        <div class="text-3xl font-bold text-yellow-400 mb-4">₹2999</div>
+                        <button class="w-full py-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold rounded-full hover:scale-105 transition-transform" onclick="claimOffer(2999)">Claim Now</button>
+                    </div>
+                </div>
+                
+                <div class="relative group">
+                    <div class="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-500 rounded-3xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
+                    <div class="relative p-8 rounded-3xl bg-black/80 backdrop-blur-xl border border-white/10">
+                        <div class="absolute top-4 right-4 text-4xl opacity-20">⏰</div>
+                        <h3 class="text-xl font-bold mb-2">Happy Hour</h3>
+                        <p class="text-gray-400 mb-4">50% off on beverages, 4-6 PM.</p>
+                        <div class="text-3xl font-bold text-green-400 mb-4">₹500</div>
+                        <button class="w-full py-3 bg-gradient-to-r from-green-400 to-emerald-500 text-black font-bold rounded-full hover:scale-105 transition-transform" onclick="claimOffer(500)">Claim Now</button>
+                    </div>
+                </div>
+                
+                <div class="relative group">
+                    <div class="absolute inset-0 bg-gradient-to-r from-purple-400 to-pink-500 rounded-3xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
+                    <div class="relative p-8 rounded-3xl bg-black/80 backdrop-blur-xl border border-white/10">
+                        <div class="absolute top-4 right-4 text-4xl opacity-20">🎊</div>
+                        <h3 class="text-xl font-bold mb-2">Weekend Special</h3>
+                        <p class="text-gray-400 mb-4">Free dessert with main course.</p>
+                        <div class="text-3xl font-bold text-purple-400 mb-4">₹200</div>
+                        <button class="w-full py-3 bg-gradient-to-r from-purple-400 to-pink-500 text-white font-bold rounded-full hover:scale-105 transition-transform" onclick="claimOffer(200)">Claim Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Order Summary -->
+    <section id="order-summary" class="py-20 relative z-10">
+        <div class="container mx-auto px-6 max-w-2xl">
+            <div class="p-8 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10">
+                <h2 class="text-2xl font-bold mb-6 flex items-center">
+                    <i class="fas fa-shopping-cart text-yellow-400 mr-3"></i>Your Order
+                </h2>
+                <ul id="order-list" class="space-y-3 mb-6"></ul>
+                <div class="flex justify-between items-center text-xl font-bold mb-6 pb-4 border-b border-white/10">
+                    <span>Total:</span>
+                    <span class="text-2xl bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">₹ <span id="total-price">0.00</span></span>
+                </div>
+                <button id="checkout-btn" class="w-full py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-full hover:scale-105 transition-transform" onclick="showPaymentForm()">
+                    <i class="fas fa-credit-card mr-2"></i>Proceed to Checkout
+                </button>
+            </div>
+        </div>
+    </section>
+
+   <!-- Payment Section -->
+<section id="payment-section" class="py-10 relative z-10" style="display: none;">
+    <div class="container mx-auto px-6 max-w-md">
+        <div class="p-8 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10">
+            <h2 class="text-2xl font-bold mb-6 text-center">
+                <i class="fas fa-lock text-yellow-400 mr-2"></i>Secure Payment
+            </h2>
+
+            <form id="payment-form" class="space-y-4">
+
+                <!-- Card Number -->
+                <div>
+                    <label class="block text-sm text-gray-400 mb-2">Card Number</label>
+                    <input 
+                        type="text"
+                        id="card-number"
+                        placeholder="1234 5678 9012 3456"
+                        maxlength="16"
+                        minlength="16"
+                        pattern="\d{16}"
+                        inputmode="numeric"
+                        class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:border-yellow-400 focus:outline-none"
+                        required>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+
+                    <!-- Expiry -->
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-2">Expiry</label>
+                        <input type="month"
+                               id="expiry-date"
+                               class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:border-yellow-400 focus:outline-none"
+                               required>
+                    </div>
+
+                    <!-- CVV -->
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-2">CVV</label>
+                        <input 
+                            type="text"
+                            id="cvv"
+                            placeholder="123"
+                            maxlength="3"
+                            minlength="3"
+                            pattern="\d{3}"
+                            inputmode="numeric"
+                            class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:border-yellow-400 focus:outline-none"
+                            required>
+                    </div>
+
+                </div>
+
+                <button type="submit"
+                    class="w-full py-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold rounded-xl hover:scale-105 transition-transform">
+                    <i class="fas fa-check mr-2"></i>Pay Now
+                </button>
+
+            </form>
+        </div>
+    </div>
+</section>
+
+    <!-- Rating -->
+    <section id="rating-section" class="py-20 relative z-10">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold mb-4">Rate Your Experience</h2>
+            <p class="text-gray-400 mb-8">Help us serve you better</p>
+            <div class="flex justify-center gap-2 mb-6">
+                <span onclick="rateRestaurant(1)" id="star-1" class="star-rating text-5xl cursor-pointer transition-all hover:scale-125">&#9733;</span>
+                <span onclick="rateRestaurant(2)" id="star-2" class="star-rating text-5xl cursor-pointer transition-all hover:scale-125">&#9733;</span>
+                <span onclick="rateRestaurant(3)" id="star-3" class="star-rating text-5xl cursor-pointer transition-all hover:scale-125">&#9733;</span>
+                <span onclick="rateRestaurant(4)" id="star-4" class="star-rating text-5xl cursor-pointer transition-all hover:scale-125">&#9733;</span>
+                <span onclick="rateRestaurant(5)" id="star-5" class="star-rating text-5xl cursor-pointer transition-all hover:scale-125">&#9733;</span>
+            </div>
+            <p id="rating-feedback" class="text-yellow-400 font-medium text-lg"></p>
+        </div>
+    </section>
+
+    <!-- Feedback -->
+    <section id="feedback-section" class="py-20 relative z-10">
+        <div class="container mx-auto px-6 max-w-2xl">
+            <h2 class="text-3xl font-bold text-center mb-8">Share Your Feedback</h2>
+            <form id="feedback-form" class="space-y-4 p-8 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10">
+                <input type="text" id="customer-name" placeholder="Your Name" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:border-yellow-400 focus:outline-none" required>
+                <textarea id="feedback-text" placeholder="Write your feedback..." class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:border-yellow-400 focus:outline-none h-32 resize-none" required></textarea>
+                <button type="submit" class="w-full py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-xl hover:scale-105 transition-transform">
+                    <i class="fas fa-paper-plane mr-2"></i>Submit Feedback
+                </button>
+            </form>
+            <div id="feedback-list" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8"></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="py-16 relative z-10" style="background: linear-gradient(180deg, transparent 0%, rgba(15, 15, 35, 1) 100%);">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <h3 class="text-2xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-pink-500 bg-clip-text text-transparent">Satyug Darshan</h3>
+                    <p class="text-gray-400 mb-4">Experience culinary magic like never before.</p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-yellow-400 hover:text-black transition-all">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-yellow-400 hover:text-black transition-all">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-yellow-400 hover:text-black transition-all">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#hero" class="hover:text-yellow-400 transition">Home</a></li>
+                        <li><a href="#menu" class="hover:text-yellow-400 transition">Menu</a></li>
+                        <li><a href="reservation.html" class="hover:text-yellow-400 transition">Reservation</a></li>
+                        <li><a href="#contact" class="hover:text-yellow-400 transition">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Contact</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><i class="fas fa-map-marker-alt text-yellow-400 mr-2"></i>Vasundhara Road, Faridabad</li>
+                        <li><i class="fas fa-phone text-yellow-400 mr-2"></i>+91 9137492380</li>
+                        <li><i class="fas fa-envelope text-yellow-400 mr-2"></i>satyug@gmail.com</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Newsletter</h4>
+                    <p class="text-gray-400 mb-4">Subscribe for exclusive offers.</p>
+                    <form class="flex">
+                        <input type="email" placeholder="Your email" class="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-l-xl focus:outline-none">
+                        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold rounded-r-xl hover:scale-105 transition-transform">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="text-center text-gray-500 pt-8 border-t border-white/10">
+                <p>&copy; 2024 Satyug Darshan. All rights reserved. Made with <i class="fas fa-heart text-pink-500"></i></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- QR Code -->
+    <div class="fixed top-24 right-6 z-30">
+    
+        <div class="bg-white/10 backdrop-blur-md px-4 py-2 rounded-full mb-3">
+            
+            <p class="text-xs font-semibold text-white whitespace-nowrap"><i class="fas fa-mobile-alt mr-2"></i>Scan for Mobile</p>
+        </div>
+        <div id="qr-code" class="bg-white p-3 rounded-2xl shadow-2xl"></div>
+    </div>
+
+    <!-- Voice Command Button -->
+    <div class="fixed bottom-6 left-6 z-50">
+        <button id="voice-btn" onclick="initAndStartVoice()" class="w-16 h-16 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full shadow-lg flex items-center justify-center hover:scale-110 transition-transform animate-pulse">
+            <i class="fas fa-microphone text-2xl text-black"></i>
+        </button>
+        <p class="text-xs text-center mt-2 text-gray-400">🎤 Voice</p>
+    </div>
+
+    <!-- Scripts - ALL KEPT EXACTLY SAME -->
+    <script>
+        let orders = JSON.parse(localStorage.getItem('orders')) || [];
+
+        function updateOrderSummary() {
+            const orderList = document.getElementById('order-list');
+            const totalPriceElement = document.getElementById('total-price');
+            orderList.innerHTML = '';
+            let totalPrice = 0;
+            orders.forEach((order, idx) => {
+                const listItem = document.createElement('li');
+                listItem.className = 'flex justify-between items-center p-4 bg-white/5 rounded-xl';
+                listItem.innerHTML = `<span>${order.name}</span><div class="flex items-center"><span class="font-bold text-yellow-400 mr-3">₹${order.price}</span><button onclick="removeFromOrder(${idx})" class="text-red-400 hover:text-red-300"><i class="fas fa-trash"></i></button></div>`;
+                orderList.appendChild(listItem);
+                totalPrice += order.price;
+            });
+            if (orders.length === 0) orderList.innerHTML = '<li class="text-center text-gray-500 py-4">Your cart is empty ✨</li>';
+            totalPriceElement.textContent = totalPrice.toFixed(2);
+        }
+
+        function addToOrder(itemName, itemPrice) {
+            const customer = JSON.parse(localStorage.getItem('customerInfo')) || {};
+            orders.push({ name: itemName, price: parseFloat(itemPrice), timestamp: new Date().toISOString(), customerName: customer.name || '', customerMobile: customer.mobile || '', customerEmail: customer.email || '' });
+            localStorage.setItem('orders', JSON.stringify(orders));
+            updateOrderSummary();
+            alert(itemName + ' added to your order! 🎉');
+        }
+
+        function removeFromOrder(index) {
+            orders.splice(index, 1);
+            localStorage.setItem('orders', JSON.stringify(orders));
+            updateOrderSummary();
+        }
+
+        function showPaymentForm() {
+            if (orders.length === 0) { alert('Your cart is empty! Add some items first 😔'); return; }
+            document.getElementById('payment-section').style.display = 'block';
+            document.getElementById('payment-section').scrollIntoView({behavior: 'smooth'});
+        }
+
+function processPayment(event) {
+            event.preventDefault();
+            alert('Payment successful! Thank you for your order! 🎊');
+            const completedOrders = JSON.parse(localStorage.getItem('completedOrders')) || [];
+            completedOrders.push(...orders);
+            localStorage.setItem('completedOrders', JSON.stringify(completedOrders));
+            const customer = JSON.parse(localStorage.getItem('customerInfo')) || {};
+            fetch('/order', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone: customer.mobile || '', order: orders, total: orders.reduce((sum, o) => sum + (o.price || 0), 0), timestamp: new Date().toISOString() }) })
+            .then(res => res.json()).then(data => { if (data.success) console.log('Order saved!'); }).catch(() => console.log('Saved locally'));
+            orders = [];
+            localStorage.setItem('orders', JSON.stringify(orders));
+            updateOrderSummary();
+            document.getElementById('payment-section').style.display = 'none';
+            document.getElementById('payment-form').reset();
+        }
+
+        let currentRating = 0;
+        function rateRestaurant(rating) {
+            currentRating = rating;
+            for (let i = 1; i <= 5; i++) {
+                const star = document.getElementById('star-' + i);
+                star.classList.toggle('glow', i <= rating);
+            }
+            document.getElementById('rating-feedback').textContent = `Thank you for rating us ${rating} star${rating > 1 ? 's' : ''}! 🌟`;
+        }
+
+        setTimeout(() => { const w = document.getElementById('welcome-goku'); if (w) { w.style.opacity = '0'; w.style.transition = 'opacity 0.5s'; setTimeout(() => w.style.display = 'none', 500); } }, 3000);
+
+        function accessAdminDashboard() {
+            const password = prompt('Enter admin password:');
+            if (password === 'admin123') window.location.href = 'admin.html';
+            else alert('Incorrect password! 🔒');
+        }
+
+        function claimOffer(offerPrice) {
+            let currentTotal = parseFloat(document.getElementById('total-price').textContent);
+            if (currentTotal >= offerPrice) { currentTotal -= offerPrice; document.getElementById('total-price').textContent = currentTotal.toFixed(2); alert(`Offer worth ₹${offerPrice} claimed! 🎉`); }
+            else alert('Add more items to avail this offer! 🛒');
+        }
+
+        document.addEventListener('DOMContentLoaded', updateOrderSummary);
+        document.getElementById('payment-form').addEventListener('submit', processPayment);
+
+        document.getElementById('feedback-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('customer-name').value;
+            const feedback = document.getElementById('feedback-text').value;
+            fetch('/save-feedback', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, feedback }) })
+            .then(() => { alert('Feedback submitted! 🙌'); loadFeedback(); document.getElementById('feedback-form').reset(); })
+            .catch(() => { alert('Saved locally'); loadFeedback(); document.getElementById('feedback-form').reset(); });
+        });
+
+        function loadFeedback() {
+            fetch('/get-feedback').then(res => res.json()).then(data => {
+                const list = document.getElementById('feedback-list');
+                list.innerHTML = '';
+                data.forEach(item => { list.innerHTML += `<div class="p-4 bg-white/5 rounded-xl border border-white/10"><p class="text-gray-300 italic">"${item.feedback}"</p><p class="mt-2 text-right text-yellow-400 font-medium">- ${item.name}</p></div>`; });
+            }).catch(() => {});
+        }
+        loadFeedback();
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        // Get table number from URL or use default
+        const urlParams = new URLSearchParams(window.location.search);
+        const tableNumber = urlParams.get('table') || '1';
+        
+        // Your ngrok URL
+        const ngrokUrl = "https://gestureless-nonuniversally-julio.ngrok-free.dev";
+        
+        // Generate QR code with ngrok URL and table number
+        const qrUrl = ngrokUrl + "/htmlpage.html?table=" + tableNumber;
+        new QRCode(document.getElementById('qr-code'), { text: qrUrl, width: 100, height: 100 });
+    </script>
+</body>
+</html>

@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    
+    <style>
+        /* Admin Dashboard Custom Styles */
+        .admin-body {
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+        }
+        
+        .admin-header {
+            background: rgba(15, 15, 35, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .admin-header h1 {
+            background: linear-gradient(135deg, #fbbf24, #ec4899, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.5rem;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .admin-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .admin-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(251, 191, 36, 0.3);
+            box-shadow: 0 20px 40px rgba(251, 191, 36, 0.15);
+        }
+        
+        .admin-card h2 {
+            color: #ffffff;
+            font-family: 'Playfair Display', serif;
+            border-bottom: 2px solid #fbbf24;
+            display: inline-block;
+            padding-bottom: 0.5rem;
+        }
+        
+        .admin-card p {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .admin-btn {
+            background: linear-gradient(135deg, #fbbf24, #ec4899);
+            color: #000;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+        
+        .admin-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(251, 191, 36, 0.4);
+        }
+        
+        .admin-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        
+        .admin-table thead tr {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        }
+        
+        .admin-table th {
+            padding: 1rem;
+            color: #ffffff;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+        }
+        
+        .admin-table th:first-child {
+            border-top-left-radius: 12px;
+        }
+        
+        .admin-table th:last-child {
+            border-top-right-radius: 12px;
+        }
+        
+        .admin-table td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .admin-table tbody tr {
+            background: rgba(255, 255, 255, 0.02);
+            transition: all 0.3s ease;
+        }
+        
+        .admin-table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .edit-btn {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #000;
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .edit-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 20px rgba(251, 191, 36, 0.4);
+        }
+        
+        .delete-btn {
+            background: linear-gradient(135deg, #10b981, #06b6d4);
+            color: #000;
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .delete-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.4);
+        }
+        
+        .admin-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #ffffff;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .admin-input:focus {
+            border-color: #fbbf24;
+            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.2);
+            outline: none;
+        }
+        
+        .admin-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .admin-select {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #ffffff;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .admin-select option {
+            background: #1a1a2e;
+            color: #ffffff;
+        }
+        
+        .menu-item-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+        }
+        
+        .menu-item-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(5px);
+        }
+        
+        .reservation-item {
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 3px solid #8b5cf6;
+            border-radius: 12px;
+            padding: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+        }
+        
+        .reservation-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(5px);
+            border-left-color: #fbbf24;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body class="admin-body">
+    <header class="admin-header text-white p-6 shadow-lg">
+        <h1 class="text-4xl font-bold text-center">Admin Dashboard</h1>
+    </header>
+    <main class="p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Manage Orders Section -->
+        <section class="admin-card p-8 animate-fade-in">
+            <h2 class="text-2xl font-bold mb-4">Manage Orders</h2>
+            <p class="mb-6">Track and manage live orders in real-time.</p>
+            <button class="admin-btn px-6 py-3"
+                onclick="loadOrders()">View Orders</button>
+            <div id="orders-section" class="mt-6">
+                <h3 class="section-title">Orders List</h3>
+                <div class="overflow-x-auto">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th class="border px-4 py-3">Phone</th>
+                                <th class="border px-4 py-3">Order</th>
+                                <th class="border px-4 py-3">Total (₹)</th>
+                                <th class="border px-4 py-3">Status</th>
+                                <th class="border px-4 py-3">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="order-history">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Manage Menu Section -->
+        <section class="admin-card p-8 animate-fade-in" style="animation-delay: 0.1s;">
+            <h2 class="text-2xl font-bold mb-4">Manage Menu</h2>
+            <p class="mb-6">Edit and update the menu dynamically.</p>
+            <button class="admin-btn px-6 py-3"
+                onclick="toggleMenuSection()">Edit Menu</button>
+            <div id="menu-section" class="mt-6 hidden">
+                <h3 class="section-title">Menu Items</h3>
+                <ul id="menu-list" class="space-y-3">
+                </ul>
+                <form id="add-menu-item-form" class="mt-4 grid grid-cols-1 md:grid-cols-5 gap-3">
+                    <input type="text" id="menu-item-name" placeholder="Item Name"
+                        class="admin-input" required>
+                    <input type="number" id="menu-item-price" placeholder="Price"
+                        class="admin-input" required>
+                    <input type="text" id="menu-item-image" placeholder="Image URL"
+                        class="admin-input" required>
+                    <input type="text" id="menu-item-description" placeholder="Description"
+                        class="admin-input">
+                    <select id="menu-item-category" class="admin-select">
+                        <option value="Starters">Starters</option>
+                        <option value="Main Course">Main Course</option>
+                        <option value="Desserts">Desserts</option>
+                        <option value="Drinks">Drinks</option>
+                    </select>
+                    <button type="submit"
+                        class="admin-btn px-4 py-2 col-span-1 md:col-span-5">Add/Update
+                        Item</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- View Reservations Section -->
+        <section class="admin-card p-8 animate-fade-in" style="animation-delay: 0.2s;">
+            <h2 class="text-2xl font-bold mb-4">View Reservations</h2>
+            <p class="mb-6">Access and manage customer reservations.</p>
+            <button class="admin-btn px-6 py-3"
+                onclick="loadReservations()">View Reservations</button>
+            <div id="reservations-section" class="mt-6 hidden">
+                <h3 class="section-title">Reservations List</h3>
+                <ul id="reservations-list" class="space-y-3">
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <script src="test.js"></script>
+    <script>
+        // Menu Functions
+        function loadMenuItems() {
+            return JSON.parse(localStorage.getItem('menuItems')) || [];
+        }
+        function saveMenuItems(items) {
+            localStorage.setItem('menuItems', JSON.stringify(items));
+        }
+        function renderMenuList() {
+            const menuList = document.getElementById('menu-list');
+            const items = loadMenuItems();
+            menuList.innerHTML = '';
+            if (items.length === 0) {
+                menuList.innerHTML = '<li class="text-gray-400">No menu items yet.</li>';
+                return;
+            }
+            items.forEach((item, idx) => {
+                const li = document.createElement('li');
+                li.className = 'menu-item-card';
+                li.innerHTML = `<div><div class="font-semibold" style="color:#fff">${item.name}</div><div class="text-sm" style="color:rgba(255,255,255,0.6)">₹${parseFloat(item.price).toFixed(2)} | ${item.category || ''}</div></div>`;
+                const actions = document.createElement('div');
+                actions.className = 'flex items-center space-x-2';
+                const editBtn = document.createElement('button');
+                editBtn.className = 'edit-btn';
+                editBtn.textContent = 'Edit';
+                editBtn.onclick = () => populateEditForm(idx);
+                const delBtn = document.createElement('button');
+                delBtn.className = 'delete-btn';
+                delBtn.textContent = 'Delete';
+                delBtn.onclick = () => {
+                    if (!confirm('Delete this menu item?')) return;
+                    items.splice(idx, 1);
+                    saveMenuItems(items);
+                    renderMenuList();
+                };
+                actions.appendChild(editBtn);
+                actions.appendChild(delBtn);
+                li.appendChild(actions);
+                menuList.appendChild(li);
+            });
+        }
+        function toggleMenuSection() {
+            const menuSection = document.getElementById('menu-section');
+            menuSection.classList.toggle('hidden');
+            renderMenuList();
+        }
+        function populateEditForm(index) {
+            const items = loadMenuItems();
+            const item = items[index];
+            document.getElementById('menu-item-name').value = item.name;
+            document.getElementById('menu-item-price').value = item.price;
+            document.getElementById('menu-item-image').value = item.image;
+            document.getElementById('menu-item-description').value = item.description || '';
+            document.getElementById('menu-item-category').value = item.category || 'Starters';
+            const form = document.getElementById('add-menu-item-form');
+            form.dataset.editIndex = index;
+            form.querySelector('button[type="submit"]').textContent = 'Update Item';
+        }
+        document.getElementById('add-menu-item-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const name = document.getElementById('menu-item-name').value.trim();
+            const price = parseFloat(document.getElementById('menu-item-price').value);
+            const image = document.getElementById('menu-item-image').value.trim();
+            const description = document.getElementById('menu-item-description').value.trim();
+            const category = document.getElementById('menu-item-category').value;
+            if (!name || isNaN(price)) {
+                alert('Please provide valid name and price.');
+                return;
+            }
+            const items = loadMenuItems();
+            const editIndex = this.dataset.editIndex;
+            if (editIndex !== undefined) {
+                items[parseInt(editIndex)] = { name, price, image, description, category };
+                delete this.dataset.editIndex;
+                this.querySelector('button[type="submit"]').textContent = 'Add/Update Item';
+            } else {
+                items.push({ name, price, image, description, category });
+            }
+            saveMenuItems(items);
+            this.reset();
+            renderMenuList();
+        });
+
+// Reservations
+        function loadReservations() {
+            fetch("http://localhost:3000/get-reservations")
+                .then(res => res.json())
+                .then(data => {
+                    const reservationsList = document.getElementById('reservations-list');
+                    reservationsList.innerHTML = '';
+                    if (!data || data.length === 0) {
+                        reservationsList.innerHTML = '<li class="text-gray-400">No reservations found.</li>';
+                        return;
+                    }
+                    data.forEach(res => {
+                        const li = document.createElement('li');
+                        li.className = 'reservation-item';
+                        li.innerHTML = `<div><span class="font-semibold">${res.date}</span> at <span class="font-semibold">${res.time}</span> - ${res.guests} guests</div>`;
+                        reservationsList.appendChild(li);
+                    });
+                })
+                .catch(err => {
+                    console.error('Error loading reservations:', err);
+                    reservationsList.innerHTML = '<li class="text-red-400">Error loading reservations.</li>';
+                });
+        }
+
+        // Orders
+        function loadOrders() {
+            fetch("http://localhost:3000/get-orders")
+                .then(res => res.json())
+                .then(data => {
+                    const tableBody = document.getElementById("order-history");
+                    tableBody.innerHTML = "";
+                    data.slice(1).forEach((row, index) => {
+                        const phone = row[0];
+                        const order = row[1];
+                        const total = row[2];
+                        const status = row[4] || "Pending";
+                        let orderText = order;
+                        try {
+                            const orderObj = JSON.parse(order);
+                            if (Array.isArray(orderObj)) {
+                                orderText = orderObj.map(o => `${o.name} - ₹${o.price}`).join(', ');
+                            }
+                        } catch (e) {
+                            orderText = order;
+                        }
+                        const tr = document.createElement("tr");
+                        tr.innerHTML = `
+                            <td class="border px-4 py-3 font-semibold">${phone || "Walk-in"}</td>
+                            <td class="border px-4 py-3"><div class="space-y-1">${orderText}</div></td>
+                            <td class="border px-4 py-3 font-bold" style="color:#10b981">₹${total}</td>
+                            <td class="border px-4 py-3">
+                                <span class="px-3 py-1 rounded-full text-white text-sm"
+                                    style="background:${status === 'Completed' ? 'linear-gradient(135deg, #10b981, #06b6d4)' : status === 'Preparing' ? 'linear-gradient(135deg, #fbbf24, #f59e0b)' : 'linear-gradient(135deg, #6b7280, #4b5563)'}">
+                                    ${status}
+                                </span>
+                            </td>
+                            <td class="border px-4 py-3 space-x-2">
+                                <button class="edit-btn" onclick="updateStatus(${index+2}, 'Preparing')">Preparing</button>
+                                <button class="delete-btn" onclick="updateStatus(${index+2}, 'Completed')">Complete</button>
+                            </td>
+                        `;
+                        tableBody.appendChild(tr);
+                    });
+                });
+        }
+
+        function updateStatus(rowIndex, status) {
+            fetch("http://localhost:3000/update-status", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ rowIndex, status })
+            })
+            .then(() => loadOrders());
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('menu-section').classList.add('hidden');
+            document.getElementById('reservations-section').classList.add('hidden');
+            renderMenuList();
+            loadOrders();
+            setInterval(loadOrders, 3000);
+            initAIAdminFeatures();
+        });
+    </script>
+    <script src="ai-features.js"></script>
+    <script>
+        // Complete AI Admin Features with Real-Time
+        function initAIAdminFeatures() {
+            console.log("🤖 Complete AI Admin Features Loaded");
+            addAIAnalytics();
+            addAdvancedAIPanels();
+            startRealTimeUpdates();
+        }
+        
+        function addAIAnalytics() {
+            const analyticsHTML = `
+                <section class="admin-card p-8 animate-fade-in" style="animation-delay: 0.3s;">
+                    <h2 class="text-2xl font-bold mb-4">
+                        <i class="fas fa-brain text-purple-400 mr-2"></i>AI Analytics
+                    </h2>
+                    <p class="mb-6">Real-time AI-powered insights.</p>
+                    <div id="ai-analytics" class="space-y-4">
+                        <div class="p-4 bg-white/5 rounded-xl border border-white/10">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h4 class="font-bold text-yellow-400">Popular Item</h4>
+                                    <p class="text-gray-300" id="popular-item">Loading...</p>
+                                </div>
+                                <div class="text-3xl">🍕</div>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded-xl border border-white/10">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h4 class="font-bold text-green-400">Peak Hours</h4>
+                                    <p class="text-gray-300">12PM - 2PM, 7PM - 9PM</p>
+                                </div>
+                                <div class="text-3xl">⏰</div>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded-xl border border-white/10">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h4 class="font-bold text-blue-400">AI Prediction</h4>
+                                    <p class="text-gray-300">Next 10 orders: Biryani 60%</p>
+                                </div>
+                                <div class="text-3xl">📈</div>
+                            </div>
+                        </div>
+                        <button onclick="generateAIReport()" class="admin-btn px-6 py-3 w-full mt-4">
+                            <i class="fas fa-robot mr-2"></i>Generate AI Report
+                        </button>
+                    </div>
+                </section>
+            `;
+            document.querySelector('main').insertAdjacentHTML('beforeend', analyticsHTML);
+        }
+        
+        function generateAIReport() {
+            alert("🤖 AI Report Generated!\n\n📊 Live Sales Analysis:\n• Peak hours: 12-2 PM & 7-9 PM\n• Most popular: Pizza & Biryani\n• Average order: ₹350\n\n💡 Recommendations:\n• Stock more paneer items\n• Consider combo offers\n• Happy hour promotion\n\n📈 Real-Time Predictions:\n• Orders today: " + (revenueTracker?.getOrders() || 0) + "\n• Revenue: ₹" + (revenueTracker?.getRevenue() || 0) + "\n• Customers: " + (customerCounter?.getToday() || 0));
+        }
+
+        function toggleDynamicPricing() {
+            const status = dynamicPricing?.getStatus() || {status: 'Normal'};
+            alert("Dynamic Pricing: " + status.status + "\n• Happy Hour: 2PM-6PM (15% OFF)\n• Peak Hours: 7PM-9PM (+10% Surge)\n\nCurrent: " + status.message);
+        }
+
+        function analyzeAllFeedback() {
+            alert("📊 Live Feedback Analysis:\n\n😊 Positive: 78%\n😐 Neutral: 18%\n😞 Negative: 4%\n\n📈 Sentiment Trend: Improving");
+        }
+
+        function getWasteRecommendations() {
+            alert("🍽️ Waste Reduction AI:\n\n1. Biryani: Reduce portion by 10%\n2. Pre-order ingredients daily\n3. Monitor inventory in real-time\n\n💰 Potential Savings: ₹2,500/month");
+        }
+
+        function addAdvancedAIPanels() {
+            const advancedPanels = `
+                <section class="admin-card p-8 animate-fade-in" style="animation-delay: 0.4s;">
+                    <h2 class="text-2xl font-bold mb-4"><i class="fas fa-chart-line text-green-400 mr-2"></i>Real-Time Demand</h2>
+                    <div class="space-y-3">
+                        <div class="p-3 bg-white/5 rounded-lg"><p class="text-sm text-gray-400">Current Demand</p><p class="text-xl font-bold text-yellow-400" id="demand-level">Loading...</p></div>
+                        <div class="p-3 bg-white/5 rounded-lg"><p class="text-sm text-gray-400">Expected Customers</p><p class="text-xl font-bold text-green-400" id="expected-customers">--</p></div>
+                        <div class="p-3 bg-white/5 rounded-lg"><p class="text-sm text-gray-400">Revenue Today</p><p class="text-xl font-bold text-purple-400" id="revenue-today">₹0</p></div>
+                    </div>
+                </section>
+                <section class="admin-card p-8 animate-fade-in" style="animation-delay: 0.5s;">
+                    <h2 class="text-2xl font-bold mb-4"><i class="fas fa-user-check text-blue-400 mr-2"></i>Live Customers</h2>
+                    <div class="space-y-3">
+                        <div class="p-3 bg-white/5 rounded-lg"><p class="text-sm text-gray-400">Currently In</p><p class="text-xl font-bold text-green-400" id="current-customers">--</p></div>
+                        <div class="p-3 bg-white/5 rounded-lg"><p class="text-sm text-gray-400">Today Total</p><p class="text-xl font-bold text-yellow-400" id="today-customers">--</p></div>
+                        <div class="p-3 bg-white/5 rounded-lg"><p class="text-sm text-gray-400">Satisfaction</p><p class="text-xl font-bold text-purple-400">4.8 ⭐</p></div>
+                    </div>
+                </section>
+                <section class="admin-card p-8 animate-fade-in" style="animation-delay: 0.6s;">
+                    <h2 class="text-2xl font-bold mb-4"><i class="fas fa-dollar-sign text-green-400 mr-2"></i>Dynamic Pricing</h2>
+                    <div class="space-y-3">
+                        <div class="p-3 bg-white/5 rounded-lg"><p class="text-sm text-gray-400">Current Mode</p><p class="text-xl font-bold text-yellow-400" id="pricing-mode">Loading...</p></div>
+                        <div class="p-3 bg-white/5 rounded-lg"><p class="text-sm text-gray-400">Happy Hour</p><p class="text-lg font-bold text-green-400">2PM-6PM (15% OFF)</p></div>
+                        <button onclick="toggleDynamicPricing()" class="admin-btn px-4 py-2 w-full mt-2">View Pricing</button>
+                    </div>
+                </section>
+                <section class="admin-card p-8 animate-fade-in" style="animation-delay: 0.7s;">
+                    <h2 class="text-2xl font-bold mb-4"><i class="fas fa-utensils text-orange-400 mr-2"></i>Menu Analytics</h2>
+                    <div class="space-y-3">
+                        <div class="p-3 bg-white/5 rounded-lg"><p class="text-sm text-gray-400">Top Selling</p><p class="text-lg font-bold text-yellow-400" id="top-item">Loading...</p></div>
+                        <div class="p-3 bg-white/5 rounded-lg"><p class="text-sm text-gray-400">Trending</p><p class="text-lg font-bold text-green-400" id="trending-item">--</p></div>
+                        <div class="p-3 bg-white/5 rounded-lg"><p class="text-sm text-gray-400">Low Stock</p><p class="text-lg font-bold text-red-400" id="low-stock">--</p></div>
+                    </div>
+                </section>
+                <section class="admin-card p-8 animate-fade-in" style="animation-delay: 0.8s;">
+                    <h2 class="text-2xl font-bold mb-4"><i class="fas fa-clock text-purple-400 mr-2"></i>Real-Time Orders</h2>
+                    <div class="space-y-3">
+                        <div class="p-3 bg-white/5 rounded-lg"><p class="text-sm text-gray-400">Orders Today</p><p class="text-xl font-bold text-blue-400" id="orders-count">--</p></div>
+                        <div class="p-3 bg-white/5 rounded-lg"><p class="text-sm text-gray-400">Avg Order</p><p class="text-xl font-bold text-yellow-400" id="avg-order">₹0</p></div>
+                        <div class="p-3 bg-white/5 rounded-lg"><p class="text-sm text-gray-400">Wait Time</p><p class="text-xl font-bold text-green-400" id="wait-time">-- min</p></div>
+                    </div>
+                </section>
+                <section class="admin-card p-8 animate-fade-in" style="animation-delay: 0.9s;">
+                    <h2 class="text-2xl font-bold mb-4"><i class="fas fa-chair text-green-400 mr-2"></i>Table Status</h2>
+                    <div class="space-y-3">
+                        <div class="p-3 bg-white/5 rounded-lg"><p class="text-sm text-gray-400">Available</p><p class="text-xl font-bold text-green-400" id="tables-available">--</p></div>
+                        <div class="p-3 bg-white/5 rounded-lg"><p class="text-sm text-gray-400">Status</p><p class="text-xl font-bold text-yellow-400" id="table-status">--</p></div>
+                        <div class="p-3 bg-white/5 rounded-lg"><p class="text-sm text-gray-400">Total Tables</p><p class="text-xl font-bold text-purple-400">20</p></div>
+                    </div>
+                </section>
+                <section class="admin-card p-8 animate-fade-in" style="animation-delay: 1.0s;">
+                    <h2 class="text-2xl font-bold mb-4"><i class="fas fa-language text-purple-400 mr-2"></i>Sentiment Analysis</h2>
+                    <div class="space-y-3">
+                        <div class="p-3 bg-white/5 rounded-lg"><p class="text-sm text-gray-400">Positive</p><p class="text-xl font-bold text-green-400">78%</p></div>
+                        <div class="p-3 bg-white/5 rounded-lg"><p class="text-sm text-gray-400">Neutral</p><p class="text-xl font-bold text-yellow-400">18%</p></div>
+                        <button onclick="analyzeAllFeedback()" class="admin-btn px-4 py-2 w-full mt-2">Analyze Feedback</button>
+                    </div>
+                </section>
+                <section class="admin-card p-8 animate-fade-in" style="animation-delay: 1.1s;">
+                    <h2 class="text-2xl font-bold mb-4"><i class="fas fa-box text-blue-400 mr-2"></i>Inventory Alert</h2>
+                    <div class="space-y-3">
+                        <div class="p-3 bg-white/5 rounded-lg"><p class="text-sm text-gray-400">Stock Status</p><p class="text-xl font-bold text-green-400" id="stock-status">OK</p></div>
+                        <div class="p-3 bg-white/5 rounded-lg"><p class="text-sm text-gray-400">Low Stock Items</p><p class="text-lg font-bold text-red-400" id="low-stock-items">--</p></div>
+                        <button onclick="showInventory()" class="admin-btn px-4 py-2 w-full mt-2">View All</button>
+                    </div>
+                </section>
+            `;
+            document.querySelector('main').insertAdjacentHTML('beforeend', advancedPanels);
+        }
+        
+        function startRealTimeUpdates() {
+            setInterval(() => {
+                // Update demand
+                const demand = demandForecaster?.check();
+                const d = document.getElementById('demand-level');
+                if (d && demand) { d.textContent = demand.demand; d.className = 'text-xl font-bold text-' + (demand.demand === 'High' ? 'red' : demand.demand === 'Medium' ? 'yellow' : 'green') + '-400'; }
+                
+                // Update customers
+                const currC = customerCounter?.getCurrent();
+                const todayC = customerCounter?.getToday();
+                if (document.getElementById('current-customers')) document.getElementById('current-customers').textContent = currC || 0;
+                if (document.getElementById('today-customers')) document.getElementById('today-customers').textContent = todayC || 0;
+                
+                // Update revenue
+                const rev = revenueTracker?.getRevenue();
+                const orders = revenueTracker?.getOrders();
+                const avg = revenueTracker?.getAverage();
+                if (document.getElementById('revenue-today')) document.getElementById('revenue-today').textContent = '₹' + (rev || 0);
+                if (document.getElementById('orders-count')) document.getElementById('orders-count').textContent = orders || 0;
+                if (document.getElementById('avg-order')) document.getElementById('avg-order').textContent = '₹' + (avg || 0);
+                
+                // Update pricing
+                const ps = dynamicPricing?.getStatus();
+                if (document.getElementById('pricing-mode') && ps) document.getElementById('pricing-mode').textContent = ps.status;
+                
+                // Update tables
+                const tables = tableAvailability?.getAvailable();
+                const tStat = tableAvailability?.getStatus();
+                if (document.getElementById('tables-available')) document.getElementById('tables-available').textContent = tables || 0;
+                if (document.getElementById('table-status') && tStat) document.getElementById('table-status').textContent = tStat.status;
+                
+                // Update wait time
+                const wait = waitPredictor?.predict();
+                if (document.getElementById('wait-time') && wait) document.getElementById('wait-time').textContent = wait.minutes + ' min';
+                
+                // Update menu analytics
+                const trending = popularityTracker?.getTrending();
+                if (document.getElementById('top-item') && trending) document.getElementById('top-item').textContent = trending[0]?.[0] || '--';
+                if (document.getElementById('trending-item') && trending) document.getElementById('trending-item').textContent = trending[1]?.[0] || '--';
+                
+                // Update inventory
+                const lowStock = inventoryTracker?.getLowStock();
+                if (document.getElementById('low-stock-items')) document.getElementById('low-stock-items').textContent = (lowStock && lowStock.length) ? lowStock.join(', ') : 'None';
+                
+            }, 2000);
+        }
+        
+        function showInventory() {
+            const stock = inventoryTracker?.stock || {};
+            let msg = "📦 Inventory Status:\n\n";
+            for (const [item, qty] of Object.entries(stock)) {
+                msg += item + ": " + qty + (qty < 10 ? " ⚠️" : "") + "\n";
+            }
+            alert(msg);
+        }
+    </script>
+</body>
+
+</html>

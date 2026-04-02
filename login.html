@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Satyug Darshan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Outfit', sans-serif; }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+
+        .login-container {
+            background: linear-gradient(135deg, rgba(15, 15, 35, 0.95), rgba(26, 26, 46, 0.95), rgba(22, 33, 62, 0.95));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .input-field {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(251, 191, 36, 0.5);
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.2);
+        }
+
+        .input-field::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #ec4899 100%);
+            border: none;
+            border-radius: 12px;
+            padding: 12px 32px;
+            color: #030712;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            letter-spacing: 0.5px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(251, 191, 36, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .login-title {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .icon-bg {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(236, 72, 153, 0.2));
+            border: 2px solid rgba(251, 191, 36, 0.3);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .error-message {
+            color: #f87171;
+            font-size: 0.875rem;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .input-field.error {
+            border-color: #f87171;
+            background: rgba(248, 113, 113, 0.05);
+        }
+
+        .input-field.error:focus {
+            box-shadow: 0 0 20px rgba(248, 113, 113, 0.2);
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .form-footer a {
+            color: #fbbf24;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .form-footer a:hover {
+            color: #f59e0b;
+            text-decoration: underline;
+        }
+
+        .success-message {
+            text-align: center;
+            padding: 12px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 8px;
+            color: #86efac;
+            margin-bottom: 16px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="bg-black text-white overflow-x-hidden">
+    <!-- Animated Background -->
+    <div class="fixed inset-0 z-0">
+        <div class="absolute inset-0 bg-gradient-to-br from-purple-900 via-black to-blue-900"></div>
+        <div class="absolute inset-0" style="background-image: url('https://www.transparenttextures.com/patterns/stardust.png');"></div>
+        <div class="absolute top-20 left-10 w-72 h-72 bg-purple-500/30 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/30 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="relative z-10 flex justify-center items-center min-h-screen px-4 py-8">
+        <div class="w-full max-w-md">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="icon-bg">
+                    <i class="fas fa-user-circle text-3xl" style="color: #fbbf24;"></i>
+                </div>
+                <h1 class="text-4xl md:text-5xl font-bold login-title mb-2">Welcome Back</h1>
+                <p class="text-gray-400">Sign in to Satyug Darshan</p>
+            </div>
+
+            <!-- Login Form -->
+            <form class="login-container p-8" id="loginForm" onsubmit="handleLogin(event)">
+                <div class="success-message" id="successMessage">
+                    <i class="fas fa-check-circle mr-2"></i>Login successful! Redirecting...
+                </div>
+
+                <!-- Name Field -->
+                <div class="form-group">
+                    <label for="name">
+                        <i class="fas fa-user mr-2" style="color: #fbbf24;"></i>Full Name
+                    </label>
+                    <input 
+                        type="text" 
+                        id="name" 
+                        name="name" 
+                        class="input-field w-full" 
+                        placeholder="Enter your full name"
+                        autocomplete="name"
+                        required
+                    >
+                    <div class="error-message" id="nameError"></div>
+                </div>
+
+                <!-- Phone Number Field -->
+                <div class="form-group">
+                    <label for="phone">
+                        <i class="fas fa-phone mr-2" style="color: #fbbf24;"></i>Phone Number
+                    </label>
+                    <input 
+                        type="tel" 
+                        id="phone" 
+                        name="phone" 
+                        class="input-field w-full" 
+                        placeholder="Enter your phone number (10 digits)"
+                        pattern="[0-9]{10}"
+                        autocomplete="tel"
+                        required
+                    >
+                    <div class="error-message" id="phoneError"></div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="submit-btn mt-6">
+                    <i class="fas fa-sign-in-alt mr-2"></i>Login
+                </button>
+            </form>
+
+            <!-- Footer -->
+            <div class="form-footer mt-6">
+                <p>First time here? <a href="#signup">Create account</a></p>
+            </div>
+
+            <!-- Info Box -->
+            <div class="mt-6 p-4 rounded-12 border border-purple-500/30 bg-purple-500/10">
+                <p class="text-sm text-gray-300">
+                    <i class="fas fa-info-circle mr-2" style="color: #06b6d4;"></i>
+                    Please provide your correct information for reservation management
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is already logged in
+        window.addEventListener('load', function() {
+            const userLogin = localStorage.getItem('userLogin');
+            if (userLogin) {
+                // User already logged in, redirect to main page
+                window.location.href = 'htmlpage.html';
+            }
+        });
+
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('name').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const nameInput = document.getElementById('name');
+            const phoneInput = document.getElementById('phone');
+            const nameError = document.getElementById('nameError');
+            const phoneError = document.getElementById('phoneError');
+            const successMessage = document.getElementById('successMessage');
+
+            let isValid = true;
+
+            // Reset errors
+            nameError.style.display = 'none';
+            phoneError.style.display = 'none';
+            nameInput.classList.remove('error');
+            phoneInput.classList.remove('error');
+
+            // Validate name
+            if (name.length < 2) {
+                nameError.textContent = 'Name must be at least 2 characters long';
+                nameError.style.display = 'block';
+                nameInput.classList.add('error');
+                isValid = false;
+            }
+
+            // Validate phone
+             const phoneRegex = /^[0-9]{10}$/;
+            if (!phoneRegex.test(phone)) {
+                phoneError.textContent = 'Please enter a valid phone number';
+                phoneError.style.display = 'block';
+                phoneInput.classList.add('error');
+                isValid = false;
+            }
+
+            if (isValid) {
+                // Save login data to localStorage
+                const loginData = { name, phone, loginTime: new Date().toISOString() };
+                localStorage.setItem('userLogin', JSON.stringify(loginData));
+                
+                // Show success message and redirect
+                successMessage.style.display = 'block';
+                console.log('Login successful:', loginData);
+                
+                // Redirect to main website after 1.5 seconds
+                setTimeout(() => {
+                    window.location.href = 'htmlpage.html';
+                }, 1500);
+            }
+        }
+
+        // Add input focus effects
+        document.querySelectorAll('.input-field').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.opacity = '1';
+            });
+        });
+
+        // Allow Enter key to submit form
+        document.getElementById('loginForm').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter' && event.target !== document.querySelector('.submit-btn')) {
+                event.preventDefault();
+                document.querySelector('.submit-btn').click();
+            }
+        });
+    </script>
+</body>
+
+</html>

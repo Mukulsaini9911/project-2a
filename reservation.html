@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table Reservation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    
+    <style>
+        /* Reservation Page Custom Styles */
+        .res-body {
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+        }
+        
+        .res-header {
+            background: rgba(15, 15, 35, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .res-header h1 {
+            background: linear-gradient(135deg, #fbbf24, #ec4899, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.5rem;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .res-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .res-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(251, 191, 36, 0.3);
+            box-shadow: 0 20px 40px rgba(251, 191, 36, 0.15);
+        }
+        
+        .res-card h2 {
+            background: linear-gradient(135deg, #fbbf24, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .res-label {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        
+        .res-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            color: #ffffff;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .res-input:focus {
+            border-color: #fbbf24;
+            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.2);
+            outline: none;
+        }
+        
+        .res-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+        
+        /* Date/time input specific styling */
+        .res-input[type="date"],
+        .res-input[type="time"],
+        .res-input[type="number"] {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            color: #ffffff;
+        }
+        
+        .res-input[type="date"]::-webkit-calendar-picker-indicator,
+        .res-input[type="time"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            cursor: pointer;
+        }
+        
+        .res-btn {
+            background: linear-gradient(135deg, #fbbf24, #ec4899);
+            color: #000;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            width: 100%;
+            padding: 1rem;
+        }
+        
+        .res-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(251, 191, 36, 0.4);
+        }
+        
+        .res-feedback {
+            margin-top: 1rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            text-align: center;
+            background: linear-gradient(135deg, #10b981, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .res-feedback.error {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .res-footer {
+            background: rgba(15, 15, 35, 0.9);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .res-footer p {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+    </style>
+</head>
+
+<body class="res-body text-black">
+    <header class="res-header text-white p-6 shadow-lg">
+        <h1 class="text-4xl font-bold text-center">Table Reservation</h1>
+    </header>
+    <main class="p-8">
+        <form id="reservation-form" class="res-card p-8 max-w-lg mx-auto animate-fade-in">
+            <h2 class="text-3xl font-bold mb-6 text-center">Reserve Your Table</h2>
+            
+            <label for="date" class="res-label">Date:</label>
+            <input type="date" id="date" class="res-input mb-6" required>
+
+            <label for="time" class="res-label">Time:</label>
+            <input type="time" id="time" class="res-input mb-6" required>
+
+            <label for="guests" class="res-label">Number of Guests:</label>
+            <input type="number" id="guests" min="1" class="res-input mb-6" required>
+
+            <button type="submit"
+                class="res-btn">
+                Book Table
+            </button>
+            <p id="availability-feedback" class="res-feedback">
+            </p>
+        </form>
+
+    </main>
+    <footer class="res-footer text-white text-center py-6">
+        <p class="text-lg">&copy; Satyug Darshan Delight</p>
+    </footer>
+    <script>
+        document.getElementById('reservation-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('time').value;
+            const guests = document.getElementById('guests').value;
+            bookTable(date, time, guests);
+        });
+
+        function bookTable(date, time, guests) {
+            const feedback = document.getElementById('availability-feedback');
+            feedback.textContent = `Table for ${guests} guests on ${date} at ${time} has been successfully reserved.`;
+
+            // Save reservation to localStorage
+            const reservations = JSON.parse(localStorage.getItem('reservations')) || [];
+            reservations.push({ date, time, guests });
+            localStorage.setItem('reservations', JSON.stringify(reservations));
+        }
+    </script>
+    <script>
+        document.getElementById("reservation-form")
+            .addEventListener("submit", function (e) {
+
+                e.preventDefault();
+
+                const date = document.getElementById("date").value;
+                const time = document.getElementById("time").value;
+                const guests = document.getElementById("guests").value;
+
+                fetch("/save-reservation", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        date: date,
+                        time: time,
+                        guests: guests
+                    })
+                })
+                    .then(res => res.text())
+                    .then(data => {
+                        document.getElementById("availability-feedback").innerText =
+                            "Reservation saved successfully!";
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        document.getElementById("availability-feedback").innerText =
+                            "Error saving reservation";
+                        document.getElementById("availability-feedback").classList.add('error');
+                    });
+            });
+    </script>
+    <script src="ai-features.js"></script>
+
+</body>
+
+</html>
