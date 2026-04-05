@@ -4,6 +4,12 @@
 const express = require('express');
 
 const app = express();
+app.get("/", (req, res) => {
+  res.send("Mera app chal raha hai 🚀");
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log("Server running"));
 
 
 const bodyParser = require('body-parser');
@@ -269,3 +275,4 @@ app.post('/update-status', async (req, res) => {
     res.status(500).json({ success: false });
   }
 });
+
