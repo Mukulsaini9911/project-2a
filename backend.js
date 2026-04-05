@@ -1,11 +1,11 @@
 // Top-level backend for restaurant platform with Google Sheets integration
 // Install: npm install express body-parser cors googleapis
-
+const path = require("path");
 const express = require('express');
 
 const app = express();
 app.get("/", (req, res) => {
-  res.send("Mera app chal raha hai 🚀");
+  res.sendFile(path.join(__dirname, "index.html"));
 });
 
 const PORT = process.env.PORT || 3000;
@@ -18,7 +18,7 @@ app.use(cors());
 const { google } = require('googleapis');
 const fs = require('fs');
 
-app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname)));
 app.use(cors());
 app.use(bodyParser.json());
 
