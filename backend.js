@@ -170,9 +170,6 @@ app.post('/feedback', async (req, res) => {
   }
 });
 
-app.listen(3000, '0.0.0.0', () => {
-    console.log("Server running on port 3000");
-});
 
 app.get("/test", async (req, res) => {
   await sheets.spreadsheets.values.append({
