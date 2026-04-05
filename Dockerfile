@@ -9,4 +9,4 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["node", "server.js"]
+CMD ["node", "backend.js","test.js","ai-features.js"]
