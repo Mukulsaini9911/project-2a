@@ -700,7 +700,7 @@ function processPayment(event) {
         const ngrokUrl = "https://gestureless-nonuniversally-julio.ngrok-free.dev";
         
         // Generate QR code with ngrok URL and table number
-        const qrUrl = ngrokUrl + "/htmlpage.html?table=" + tableNumber;
+        const qrUrl = ngrokUrl + "/index.html?table=" + tableNumber;
         new QRCode(document.getElementById('qr-code'), { text: qrUrl, width: 100, height: 100 });
     </script>
 </body>
